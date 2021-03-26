@@ -36,8 +36,8 @@ class ModelPoseREN(object):
             init_proto_name, init_model_name = util.get_model(dataset, 'baseline')
             proto_name, model_name = util.get_model(dataset, 'pose_ren')
 
-        print init_proto_name, init_model_name
-        print proto_name, model_name
+        print(init_proto_name, init_model_name)
+        print(proto_name, model_name)
         self._net = caffe.Net(proto_name, caffe.TEST, weights=model_name)
         self._net_init = caffe.Net(init_proto_name, caffe.TEST, weights=init_model_name)
 

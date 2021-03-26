@@ -32,7 +32,7 @@ def show_pose(dataset_model, dataset_image, base_dir, outputs, list_file, save_d
                               is_flip=is_flip)
         img = img.astype(np.float32)
         # img[img >= 1000] = 1000
-        img = (img - img.min())*255 / (img.max() - img.min())
+        img = (img - img.min())*255 // (img.max() - img.min())
         img = np.uint8(img)
         img = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
         img = util.draw_pose(dataset_model, img, pose)

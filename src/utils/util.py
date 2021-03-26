@@ -19,7 +19,7 @@ from enum import Enum
 def get_positions(in_file):
     with open(in_file) as f:
         positions = [list(map(float, line.strip().split())) for line in f]
-    return np.reshape(np.array(positions), (-1, len(positions[0]) / 3, 3))
+    return np.reshape(np.array(positions), (-1, len(positions[0]) // 3, 3))
 
 
 def check_dataset(dataset):
@@ -45,8 +45,8 @@ def get_joint_num(dataset):
     return joint_num_dict[dataset]
 
 def pixel2world(x, fx, fy, ux, uy):
-    x[:, :, 0] = (x[:, :, 0] - ux) * x[:, :, 2] / fx
-    x[:, :, 1] = (x[:, :, 1] - uy) * x[:, :, 2] / fy
+    x[:, :, 0] = (x[:, :, 0] - ux) * x[:, :, 2] // fx
+    x[:, :, 1] = (x[:, :, 1] - uy) * x[:, :, 2] // fy
     return x
 
 
@@ -256,7 +256,7 @@ def get_center_fast(img, upper=650, lower=1):
         centers[0] = 0
         centers[1] = 0
         centers[2] = 300.0
-    #print centers
+    #print(centers)
     return centers
 
 

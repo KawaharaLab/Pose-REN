@@ -32,7 +32,7 @@ def deploy_pose_ren_net(dataset):
     n.data = L.Input(name="data", shape=dict(dim=[1, 1, 96, 96]))
     n.prev_pose = L.Input(name="prev_pose", shape=dict(dim=[1, point_num_*3]))
 
-    print str(n.to_proto())
+    print(str(n.to_proto()))
 
     # the base net
     n.conv0, n.relu0 = conv_relu(n.data, 16)
