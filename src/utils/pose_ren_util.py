@@ -10,7 +10,7 @@ def combine_gt_init_label(gt_label_file, init_label_file, combined_label_file, J
     print(len(init_labels))
 
     combined_poses = np.zeros((len(gt_labels), J * 3 * 2), dtype=float)
-    for idx in xrange(len(gt_labels)):
+    for idx in range(len(gt_labels)):
         # get pose
         gt_pose = map(float, gt_labels[idx].split())
         gt_pose = np.asarray(gt_pose)

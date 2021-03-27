@@ -28,8 +28,13 @@ def main():
                      'msra': config.msra_data_dir}
     base_dir = data_dir_dict[dataset] #sys.argv[3]
     batch_size = 64
-    if len(sys.argv) == 4:
+    if len(sys.argv) >= 4:
         batch_size = int(sys.argv[3])
+
+    if len(sys.argv) == 5:
+        max_images = int(sys.argv[4])
+    else:
+        max_images = None
 
     # generate deploy prototxt
     make_baseline_net(os.path.join(ROOT_DIR, '../models'), dataset)
@@ -42,13 +47,13 @@ def main():
         # the last index of frames belong to the same subject
         msra_id_split_range = np.array([8499, 16991, 25403, 33891, 42391, 50888, 59385, 67883, 76375]) - 1
         results = []
-        for test_id in xrange(9):
+        for test_id in range(9):
             hand_model.reset_model(dataset, test_id)
             sidx = msra_id_split_range[test_id-1] + 1 if test_id else 0
             eidx = msra_id_split_range[test_id]
             sub_names = names[sidx:eidx+1]
             sub_centers= centers[sidx:eidx + 1]
-            print 'evaluating for subject {} ...'.format(test_id)
+            print('evaluating for subject {} ...'.format(test_id))
             sub_results = hand_model.detect_files(base_dir, sub_names, sub_centers, max_batch=batch_size)
             if test_id == 0:
                 results = sub_results
@@ -56,6 +61,8 @@ def main():
                 results = np.concatenate((results, sub_results), axis=0)
         util.save_results(results, out_file)
     else:
+        if max_images is not None:
+            names = names[:max_images]
         results = hand_model.detect_files(base_dir, names, centers, max_batch=batch_size)
         util.save_results(results, out_file)
 

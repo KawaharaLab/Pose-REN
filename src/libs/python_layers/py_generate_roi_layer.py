@@ -8,7 +8,7 @@ class PyGenerateROILayer(caffe.Layer):
         if len(bottom) != 1:
             raise Exception("PyGenerateROILayer only takes pose as input.")
         self.batch_size = bottom[0].data.shape[0]
-        self.joint_num = int(np.floor(bottom[0].data.shape[1] / 3))
+        self.joint_num = int(np.floor(bottom[0].data.shape[1] // 3))
         # config
         params = eval(self.param_str)
         self.joint_idx = int(params['joint_idx'])
@@ -29,7 +29,7 @@ class PyGenerateROILayer(caffe.Layer):
     def forward(self, bottom, top):
         poses = np.array(bottom[0].data)
         top[0].data[...] = top[0].data[...] * 0
-        for i in xrange(self.batch_size):
+        for i in range(self.batch_size):
             joint = poses[i]
             joint = np.reshape(joint, (-1, 3))
             x1 = (joint[self.joint_idx, 0]+1)*self.img_w/2 - self.roi_w*self.spatial_mul/2

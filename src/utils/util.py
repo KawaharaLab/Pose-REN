@@ -124,8 +124,7 @@ def load_names(dataset):
 
 def load_centers(dataset):
     with open('{}/results/{}_center.txt'.format(os.path.join(ROOT_DIR, '..'), dataset)) as f:
-        return np.array([map(float,
-            line.strip().split()) for line in f])
+        return np.array([list(map(float, line.strip().split())) for line in f])
 
 
 def get_sketch_setting(dataset):

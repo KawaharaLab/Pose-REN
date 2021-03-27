@@ -70,7 +70,7 @@ class ModelPoseREN(object):
         self._net.blobs['prev_pose'].reshape(batch_size, channels)
         for idx in range(batch_size):
             self._net.blobs['data'].data[idx, ...] = cropped_images[idx]
-        for it in xrange(3):
+        for it in range(3):
             self._net.blobs['prev_pose'].data[...] = prev_pose
             if self._dataset == 'hands17':
                 poses = self._net.forward()['predict']
@@ -118,10 +118,10 @@ class ModelPoseREN(object):
         return np.array(results)
     
     def _crop_image(self, img, center, is_debug=False):
-        xstart = center[0] - self._cube_size / center[2] * self._fx
-        xend = center[0] + self._cube_size / center[2] * self._fx
-        ystart = center[1] - self._cube_size / center[2] * self._fy
-        yend = center[1] + self._cube_size / center[2] * self._fy
+        xstart = center[0] - self._cube_size // center[2] * self._fx
+        xend = center[0] + self._cube_size // center[2] * self._fx
+        ystart = center[1] - self._cube_size // center[2] * self._fy
+        yend = center[1] + self._cube_size // center[2] * self._fy
 
         src = [(xstart, ystart), (xstart, yend), (xend, ystart)]    
         dst = [(0, 0), (0, self._input_size - 1), (self._input_size - 1, 0)]
@@ -135,7 +135,7 @@ class ModelPoseREN(object):
         res_img /= self._cube_size
 
         if is_debug:
-            img_show = (res_img + 1) / 2;
+            img_show = (res_img + 1) // 2;
             hehe = cv2.resize(img_show, (512, 512))
             cv2.imshow('debug', img_show)
             ch = cv2.waitKey(0)
@@ -146,10 +146,10 @@ class ModelPoseREN(object):
 
     def _transform_pose(self, poses, centers):
         res_poses = np.array(poses) * self._cube_size
-        num_joint = poses.shape[1] / 3
+        num_joint = poses.shape[1] // 3
         centers_tile = np.tile(centers, (num_joint, 1, 1)).transpose([1, 0, 2])
-        res_poses[:, 0::3] = res_poses[:, 0::3] * self._fx / centers_tile[:, :, 2] + centers_tile[:, :, 0]
-        res_poses[:, 1::3] = res_poses[:, 1::3] * self._fy / centers_tile[:, :, 2] + centers_tile[:, :, 1]
+        res_poses[:, 0::3] = res_poses[:, 0::3] * self._fx // centers_tile[:, :, 2] + centers_tile[:, :, 0]
+        res_poses[:, 1::3] = res_poses[:, 1::3] * self._fy // centers_tile[:, :, 2] + centers_tile[:, :, 1]
         res_poses[:, 2::3] += centers_tile[:, :, 2]
         res_poses = np.reshape(res_poses, [poses.shape[0], -1, 3])
         if self._dataset == 'nyu':
